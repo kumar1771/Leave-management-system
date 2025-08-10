@@ -2,6 +2,9 @@ package com.example.Leave.management.system.Controller;
 
 //import com.example.Leave.management.system.Model.Leavelog;
 import com.example.Leave.management.system.Model.LeaveReport;
+import com.example.Leave.management.system.Model.LeaveReportAverage;
+import com.example.Leave.management.system.Model.LeaveSignup;
+import com.example.Leave.management.system.Model.RoleBasedAccess;
 import com.example.Leave.management.system.Service.LeaveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -22,7 +25,7 @@ public class LeaveController {
         boolean isValid = leaveservice.validate(emailId,password);
         return (isValid) ? "return success" : "Incorrect user Id or password";
     }
-    @PostMapping("leave/signup")
+    @PostMapping("/leave/signup")
     public String signUp(@RequestParam("name") String name,@RequestParam("emailId") String emailId,@RequestParam("password") String password){
         leaveservice.SignUp(name,emailId,password);
         return "You have successfully signup using "+emailId;
@@ -50,6 +53,24 @@ public class LeaveController {
         }
         return remainingLeave;
     }
+    @PutMapping("Rollassignment")
+    public List<RoleBasedAccess> RollBasedAssignment(){
+        return leaveservice.RollAssignment();
+    }
+    @PutMapping("RollBasedAccess/{emailId}")
+    public List<LeaveReportAverage> RollBasedaccess(@PathVariable("emailId") String emailId){
+        return leaveservice.AccessBasedOnRoll(emailId);
+    }
+//    @GetMapping("leave/report/lowleavesandhighleaves")
+//    public List<LeaveReportAverage> findByNoOfLeaves () {
+//        return leaveservice.findbynoofleaves();
+//    }
+    @PostMapping("/login")
+    public String Login(@RequestBody LeaveSignup leaveSignup){
+        return leaveservice.Verify(leaveSignup);
+    }
+
+
 
 
 
